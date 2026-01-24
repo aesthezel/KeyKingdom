@@ -1,0 +1,37 @@
+{
+  "id": "camp",
+  "tileSize": 7.5,
+  "legend": [
+    {
+      "symbol": "#",
+      "spriteFile": "Assets/Sprites/tile.png",
+      "layer": "Floor",
+      "hasCollision": false
+    },
+    {
+      "symbol": ".",
+      "spriteFile": "Assets/Sprites/floor_plants.png",
+      "layer": "Floor",
+      "hasCollision": false
+    },
+    {
+      "symbol": "@",
+      "spriteFile": "Assets/Sprites/floor_campfire.png",
+      "layer": "Obstacle",
+      "hasCollision": true
+    },
+    {
+      "symbol": "B",
+      "spriteFile": "Assets/Sprites/bridge.png",
+      "layer": "Obstacle",
+      "hasCollision": true
+    }
+  ],
+  "layout": [
+    "#######",
+    "#@.B..#",
+    "#..B..#",
+    "#..B..#",
+    "#######"
+  ]
+}
