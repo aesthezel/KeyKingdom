@@ -1,4 +1,9 @@
 local MODULE_PATH = CurrentModulePath
+
+events.on("TileMapLoaded", function(mapId)
+    log("Map" .. mapId .. "loaded!")
+end)
+
 local character_sprite = CurrentModulePath .. "/Assets/Sprites/Characters/yellow_character.png"
 local character = entity.spawn("character", character_sprite, "Yellow", 5, 3, 5)
 

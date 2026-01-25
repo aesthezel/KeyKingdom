@@ -13,19 +13,26 @@ namespace Game.Core.Scripts
         // TODO: ServiceLocator
         public static LuaEngine Global;
         
+        public LuaState State => _luaState;
+        
         private LuaState _luaState;
         private List<ILuaModule> _activeModules;
+        
+        public EventModule Events { get; private set; }
 
         private void Awake()
         {
             Global = this;
             
+            Events = new EventModule();
+            
             _activeModules = new List<ILuaModule>
             {
+                Events,
                 new DebugModule(),
                 new EntityModule(),
                 new TileMapModule(),
-                new CameraModule()
+                new CameraModule(),
             };
             
             InitializeLua();

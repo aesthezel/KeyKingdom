@@ -112,8 +112,9 @@ namespace Game.Core.Scripts.LuaModules
                     Debug.Log($"[MapModule] Layer '{kvp.Key}' populated with {ctx.Positions.Count} tiles.");
                 }
             }
-
-            Debug.Log($"[MapModule] Map loaded: {mapData.id}");
+            
+            LuaEngine.Global.Events.TriggerEvent("TileMapLoaded", mapData.id);
+            
             return await PositiveReturn;
         }
 

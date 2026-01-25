@@ -12,10 +12,19 @@ namespace Game.Core.Scripts.Systems.EntitySystem
             transform.Translate(direction * MoveSpeed * Time.deltaTime);
         }
 
-        public void TakeDamage(int amount)
+        public virtual void TakeDamage(int amount)
         {
-            Health -= amount;
-            if (Health <= 0) Kill();
+            if (LuaEngine.Global != null)
+            {
+                LuaEngine.Global.Events.TriggerEvent("EntityDamaged", Name, amount);
+            }
+
+            if (Health > 0) return;
+            
+            if (CompareTag("Player"))
+            {
+                LuaEngine.Global.Events.TriggerEvent("GameOver");
+            }
         }
     }
 }
