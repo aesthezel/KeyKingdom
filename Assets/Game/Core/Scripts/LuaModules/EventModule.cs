@@ -39,30 +39,36 @@ namespace Game.Core.Scripts.LuaModules
         
         public async void TriggerEvent(string eventName, params object[] args)
         {
-
-            if (!_listeners.TryGetValue(eventName, out var callbacks)) return;
-            
-            var state = LuaEngine.Global.State;
-            var callbacksToRun = new List<LuaValue>(callbacks);
-                
-            foreach (var callbackValue in callbacksToRun)
+            try
             {
-                try 
+                if (!_listeners.TryGetValue(eventName, out var callbacks)) return;
+            
+                var state = LuaEngine.Global.State;
+                var callbacksToRun = new List<LuaValue>(callbacks);
+                
+                foreach (var callbackValue in callbacksToRun)
                 {
-                    if (!callbackValue.TryRead<LuaFunction>(out var luaFunc)) continue;
-                    
-                    foreach (var arg in args)
+                    try 
                     {
-                        LuaValue val = LuaValue.FromObject(arg);
-                        state.Stack.Push(val);
-                    }
+                        if (!callbackValue.TryRead<LuaFunction>(out var luaFunc)) continue;
                     
-                    await state.RunAsync(luaFunc, args.Length);
+                        foreach (var arg in args)
+                        {
+                            LuaValue val = LuaValue.FromObject(arg);
+                            state.Stack.Push(val);
+                        }
+                    
+                        await state.RunAsync(luaFunc, args.Length);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"[EventModule] Error crítico en evento '{eventName}': {e}");
+                    }
                 }
-                catch (Exception e)
-                {
-                    Debug.LogError($"[EventModule] Error crítico en evento '{eventName}': {e}");
-                }
+            }
+            catch (Exception e)
+            {
+                throw; // TODO handle exception
             }
         }
     }

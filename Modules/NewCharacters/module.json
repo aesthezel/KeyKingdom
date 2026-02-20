@@ -1,0 +1,7 @@
+{
+    "id": "new_characters",
+    "name": "New Characters",
+    "version": "0.0.1",
+    "description": "Characters!",
+    "entryScript": "start.lua"
+}

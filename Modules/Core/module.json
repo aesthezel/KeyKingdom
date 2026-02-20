@@ -3,5 +3,5 @@
     "name": "Core",
     "version": "0.0.1",
     "description": "Initial module",
-    "entryScript": "init.lua"
+    "entryScript": "start.lua"
 }

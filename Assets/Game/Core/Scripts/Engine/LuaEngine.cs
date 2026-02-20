@@ -18,21 +18,24 @@ namespace Game.Core.Scripts
         private LuaState _luaState;
         private List<ILuaModule> _activeModules;
         
+        public GameLoopModule GameLoop { get; private set; }
         public EventModule Events { get; private set; }
 
         private void Awake()
         {
             Global = this;
             
+            GameLoop = new GameLoopModule();
             Events = new EventModule();
             
             _activeModules = new List<ILuaModule>
             {
+                GameLoop,
                 Events,
                 new DebugModule(),
                 new EntityModule(),
                 new TileMapModule(),
-                new CameraModule(),
+                new CameraModule()
             };
             
             InitializeLua();

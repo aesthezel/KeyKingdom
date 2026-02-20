@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Game.Core.Scripts.Loaders;
 using Game.Core.Scripts.LuaObjects;
-using Game.Core.Scripts.Systems.EntitySystem;
 using Lua;
 using UnityEngine;
 
