@@ -5,19 +5,25 @@ using Game.Core.Scripts.LuaModules.Interfaces;
 using Lua;
 using Lua.Standard;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-namespace Game.Core.Scripts
+namespace Game.Core.Scripts.Engine
 {
     public class LuaEngine : MonoBehaviour
     {
         // TODO: ServiceLocator
         public static LuaEngine Global;
         
+        [SerializeField] private InputActionAsset inputActions;
+        
         public LuaState State => _luaState;
         
         private LuaState _luaState;
         private List<ILuaModule> _activeModules;
         
+        // Global modules
+        // TODO: Move to a service locator
+        public InputModule Inputs { get; private set; }
         public GameLoopModule GameLoop { get; private set; }
         public EventModule Events { get; private set; }
 
@@ -27,11 +33,13 @@ namespace Game.Core.Scripts
             
             GameLoop = new GameLoopModule();
             Events = new EventModule();
+            Inputs = new InputModule(inputActions);
             
             _activeModules = new List<ILuaModule>
             {
                 GameLoop,
                 Events,
+                Inputs,
                 new DebugModule(),
                 new EntityModule(),
                 new TileMapModule(),
@@ -74,6 +82,22 @@ namespace Game.Core.Scripts
             {
                 Debug.LogError($"[GENERAL ERROR]: {e}");
             }
+        }
+        
+        // TODO: ubicar una clase runtime que funcione como capa directa con funciones de Unity
+        private void Update()
+        {
+            GameLoop?.Update(Time.deltaTime);
+        }
+
+        private void FixedUpdate()
+        {
+            GameLoop?.FixedUpdate(Time.fixedDeltaTime);
+        }
+
+        private void LateUpdate()
+        {
+            GameLoop?.LateUpdate(Time.deltaTime);
         }
 
         public void Reload()

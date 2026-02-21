@@ -5,6 +5,8 @@ namespace Game.Core.Scripts.LuaModules
 {
     public class DebugModule : BaseLuaModule
     {
+        public override string ModuleName => "debug";
+        
         protected override void RegisterFunctions(LuaTable table)
         {
             Bind(table, "log", (context, ct) =>
