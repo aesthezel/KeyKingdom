@@ -10,8 +10,8 @@ namespace Game.Core.Scripts.LuaModules
     {
         protected static ValueTask<int> PositiveReturn = new(1);
         protected static ValueTask<int> NegativeReturn = new(0);
-        
-        public virtual string ModuleName { get; }
+
+        public virtual string ModuleName { get; protected set; } = string.Empty;
         
         public void Register(LuaState luaState)
         {

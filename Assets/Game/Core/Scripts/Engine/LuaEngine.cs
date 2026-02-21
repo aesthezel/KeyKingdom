@@ -16,9 +16,10 @@ namespace Game.Core.Scripts.Engine
         
         [SerializeField] private InputActionAsset inputActions;
         
+        // El contexto de LUA que proviene de los scripts
         public LuaState State => _luaState;
-        
         private LuaState _luaState;
+        
         private List<ILuaModule> _activeModules;
         
         // Global modules

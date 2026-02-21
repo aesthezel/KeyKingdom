@@ -17,14 +17,8 @@ namespace Game.Core.Scripts.Loaders
 
         void Start()
         {
-            // 1. Obtener la ruta raíz del proyecto (padre de 'Assets' o 'Game_Data')
-            // Esto elimina la necesidad de usar "../" manual
             var projectRoot = Directory.GetParent(Application.dataPath).FullName;
-            
-            // 2. Combinar limpiamente
             ModulesRoot = Path.Combine(projectRoot, ModulesFolderName);
-            
-            // 3. Normalizar separadores (opcional pero recomendado para consistencia en logs)
             ModulesRoot = ModulesRoot.Replace("\\", "/");
 
             if (!Directory.Exists(ModulesRoot))
@@ -43,19 +37,15 @@ namespace Game.Core.Scripts.Loaders
 
             foreach (string modDir in modDirectories)
             {
-                // Limpieza de ruta del mod específico
                 string cleanModDir = modDir.Replace("\\", "/");
-                
                 string jsonPath = Path.Combine(cleanModDir, ModuleDefinitionFileName);
 
                 if (!File.Exists(jsonPath)) continue;
                 
                 string jsonContent = File.ReadAllText(jsonPath);
                 
-                // Asumimos que tienes la clase ModuleDefinition definida
                 ModuleDefinition mod = JsonUtility.FromJson<ModuleDefinition>(jsonContent);
                 
-                // Guardamos la ruta limpia en el objeto del mod
                 mod.rootPath = cleanModDir;
 
                 loadedMods.Add(mod);
@@ -63,15 +53,12 @@ namespace Game.Core.Scripts.Loaders
                     
                 if (!string.IsNullOrEmpty(mod.entryScript))
                 {
-                    // Path.Combine acepta multiples argumentos, es mas seguro que concatenar strings
                     string scriptPath = Path.Combine(mod.rootPath, ScriptsFolderName, mod.entryScript);
-                    
-                    // Cargar el texto del script
                     string luaCode = ResourceLoader.LoadText(scriptPath);
                     
                     if (luaCode != null)
                     {
-                        // IMPORTANTE: Pasamos la ruta limpia a LUA para evitar problemas de escape
+                        // IMPORTANTE: Pasamos la ruta limpia a LUA para evitar problemas con la ubicación del modulo
                         LuaEngine.Global.SetGlobal("CurrentModulePath", mod.rootPath);
                         LuaEngine.Global.ExecuteScript(luaCode);
                     }
